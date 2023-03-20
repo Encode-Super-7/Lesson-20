@@ -86,7 +86,7 @@ export class AppComponent {
   // }
 
   createWallet() {
-    this.userWallet = Wallet.connect(this.provider);
+    this.userWallet = Wallet.createRandom().connect(this.provider);
     this.userWallet.getBalance().then((balanceBN) => {
       const balanceStr = utils.formatEther(balanceBN);
       this.userBalance = parseFloat(balanceStr);
