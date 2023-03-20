@@ -26,7 +26,7 @@ async function main() {
    //DEPLOYMENT
     const lotteryContractFactory = new Lottery__factory(signer);
     console.log("Deploying contract...");
-    const lotteryContract = await lotteryContractFactory.deploy("Lottery Token", "LTO", 1, 1, 0.2);
+    const lotteryContract = await lotteryContractFactory.deploy("Lottery Token", "LTO", 1, 1, 2 ^ 10*18);
     console.log("Awaiting for confirmations...");
     const txReceipts = await lotteryContract.deployTransaction.wait();
     console.log(`Ballot contract deployed to ${txReceipts.contractAddress} in the block number ${txReceipts.blockNumber}`);
