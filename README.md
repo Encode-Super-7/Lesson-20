@@ -1,5 +1,13 @@
 # Lesson 20 - Lottery
 
+cd fronend
+yarn
+yarn run dev
+
+cd blockchain
+yarn
+
+
 ## Lottery contract
 
 * (Review) Design patterns
