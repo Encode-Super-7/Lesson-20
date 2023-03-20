@@ -1,10 +1,10 @@
-import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { BigNumber, Contract, Wallet, ethers, utils } from 'ethers';
-import tokenJson from '../assets/MyToken.json';
+import Lottery from '../assets/Lottery.json';
+import LotteryToken from '../assets/LotteryToken.json';
 
-const TOKEN_ADDRESS_API_URL = 'http://localhost:3000/contract-address';
-const TOKEN_MINT_API_URL = 'http://localhost:3000/request-tokens';
+const LOTTERY_ADDRESS = "0xb2b04ede3054c424C546A6698908F22cE752D87a"
+const TOKEN_ADDRESS = "0x6bb12A0d9b67ecA47d5ed9f71622b33F71746274"
 
 @Component({
   selector: 'app-root',
@@ -17,43 +17,74 @@ export class AppComponent {
   userWallet: Wallet | undefined;
   userBalance: number | undefined;
   userTokenBalance: number | undefined;
-  tokenContractAddress: string | undefined;
-  tokenContract: Contract | undefined;
+  // tokenContractAddress: string | undefined;
+  // tokenContract: Contract | undefined;
   tokenSupply: number | undefined;
 
-  constructor(private http: HttpClient) {
+  // newly added for lesson 20
+  lotteryContractAddress: string | undefined;
+  lotteryContract: Contract | undefined;
+  tokenContractAddress: string | undefined;
+  tokenContract: Contract | undefined;
+
+  constructor() {
     this.provider = ethers.providers.getDefaultProvider('goerli');
-  }
+    this.lotteryContract = new ethers.Contract(
+      LOTTERY_ADDRESS,
+      Lottery.abi,
+      this.provider
+    )
+  };
 
-  syncBlock() {
-    this.blockNumber = 'Loading...';
-    this.provider.getBlock('latest').then((block) => {
-      this.blockNumber = block.number;
-    });
-    this.http
-      .get<{ result: string }>(TOKEN_ADDRESS_API_URL)
-      .subscribe((answer) => {
-        this.tokenContractAddress = answer.result;
-        this.getTokenInfo();
-      });
-  }
-
-  getTokenInfo() {
-    if (!this.tokenContractAddress) return;
-    this.tokenContract = new Contract(
-      this.tokenContractAddress,
-      tokenJson.abi,
-      this.userWallet ?? this.provider
+  async checkState(){
+   
+    const state = await this.lotteryContract?.['betsOpen']();
+    console.log(`The lottery is ${state ? "open" : "closed"}\n`);
+    if (!state) return;
+    const currentBlock = await this.provider.getBlock("latest");
+    const currentBlockDate = new Date(currentBlock.timestamp * 1000);
+    const closingTime = await this.lotteryContract?.['betsClosingTime']();
+    const closingTimeDate = new Date(closingTime.toNumber() * 1000);
+    console.log(
+    `The last block was mined at ${currentBlockDate.toLocaleDateString()} : ${currentBlockDate.toLocaleTimeString()}\n`
+  );
+    console.log(
+      `lottery should close at ${closingTimeDate.toLocaleDateString()} : ${closingTimeDate.toLocaleTimeString()}\n`
     );
-    this.tokenContract['totalSupply']().then((totalSupplyBN: BigNumber) => {
-      const totalSupplyStr = utils.formatEther(totalSupplyBN);
-      this.tokenSupply = parseFloat(totalSupplyStr);
-    });
+  };
+
+  consoleLog(){
+    console.log(this.lotteryContractAddress);
+    console.log("clicked button");
   }
 
-  clearBlock() {
-    this.blockNumber = undefined;
-  }
+  // syncBlock() {
+  //   this.blockNumber = 'Loading...';
+  //   this.provider.getBlock('latest').then((block) => {
+  //     this.blockNumber = block.number;
+  //   });
+  //   this.
+  //       this.tokenContractAddress = answer.result;
+  //       this.getTokenInfo();
+  //     });
+  // }
+
+  // getTokenInfo() {
+  //   if (!this.tokenContractAddress) return;
+  //   this.tokenContract = new Contract(
+  //     this.tokenContractAddress,
+  //     tokenJson.abi,
+  //     this.userWallet ?? this.provider
+  //   );
+  //   this.tokenContract['totalSupply']().then((totalSupplyBN: BigNumber) => {
+  //     const totalSupplyStr = utils.formatEther(totalSupplyBN);
+  //     this.tokenSupply = parseFloat(totalSupplyStr);
+  //   });
+  // }
+
+  // clearBlock() {
+  //   this.blockNumber = undefined;
+  // }
 
   createWallet() {
     this.userWallet = Wallet.createRandom().connect(this.provider);
@@ -69,12 +100,39 @@ export class AppComponent {
     });
   }
 
-  requestTokens(value: string) {
-    const body = { address: this.userWallet?.address, value: value };
-    this.http
-      .post<{ result: any }>(TOKEN_MINT_API_URL, body)
-      .subscribe((ans) => {
-        console.log({ ans });
-      });
+  // requestTokens(value: string) {
+  //   const body = { address: this.userWallet?.address, value: value };
+  //   this.http
+  //     .post<{ result: any }>(TOKEN_MINT_API_URL, body)
+  //     .subscribe((ans) => {
+  //       console.log({ ans });
+  //     });
+  // }
+
+  
+
+  openBets(){};
+
+  displayBalance(){};
+
+  buyTokens(){};
+
+  displayTokenBalance(){};
+
+  bet(){};
+
+  closeLottery(){};
+
+  displayPrize(){};
+
+  claimPrize(){};
+
+  displayPrizeBalance(){};
+
+  displayOwnerPool(){};
+
+  withdrawTokens(){};
+
+  burnTokens(){};
+
   }
-}
