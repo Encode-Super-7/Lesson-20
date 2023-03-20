@@ -2,15 +2,13 @@
   <h1 class="display-5 fw-bold">Hello!</h1>
   <div class="col-lg-6 mx-auto">
     <div class="my-4">
-      <p class="lead mb-4">
-       Connect your wallet to get bettin'
-      </p>
+      <p class="lead mb-4">Connect your wallet to get bettin'</p>
       <button
         type="button"
         class="btn btn-success btn-lg px-4 gap-3"
         (click)="createWallet()"
       >
-        {{ userWallet ? "Recreate" : "Create" }} Wallet
+        {{ userWallet ? "Refresh" : "Show Lottery State" }}
       </button>
       <div *ngIf="userWallet" class="card my-4">
         <div class="card-body">
@@ -21,12 +19,11 @@
           <h6 class="card-subtitle mb-2 text-muted">
             {{ userWallet.privateKey }}
           </h6>
+          <p class="card-text">Current Prize Pool: {{ displayPrize() }} ETH</p>
+          <p class="card-text">Current Fee Pool: ETH</p>
           <p class="card-text">Balance: {{ userBalance }} ETH</p>
-          <p class="card-text">Balance: {{ userTokenBalance }} MKT</p>
+          <p class="card-text">Balance: {{ userTokenBalance }} LTO</p>
           <div *ngIf="!userTokenBalance || userTokenBalance == 0" class="my-4">
-            <p>Request Tokens</p>
-            <input #valueInput class="input" type="number" min="0" max="10" />
-            <p>Claim:</p>
             <button
               *ngIf="valueInput.value"
               type="button"
@@ -44,26 +41,81 @@
           <h6 class="card-subtitle mb-2 text-muted">
             {{ tokenContractAddress }}
           </h6>
-          <p class="card-text">Total Supply: {{ tokenSupply }} MKT</p>
+          <p class="card-text">Total Supply: {{ tokenSupply }} LTO</p>
         </div>
       </div>
     </div>
+  </div>
 
-    <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+  <div
+    class="d-grid gap-4 mat-card-content d-sm-flex justify-content-sm-center py-5"
+  ></div>
+  <h4>Better Operations</h4>
+  <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+    <div>
       <button
         type="button"
         class="btn btn-primary btn-lg px-4 gap-3"
-        (click)="consoleLog()"
+        (click)="buyTokens()"
       >
-        Sync
+        Buy Tokens
       </button>
+      <p>Amount to buy</p>
+      <input #valueInput class="inputBuy" type="number" min="0" max="10" />
+    </div>
+
+    <div>
       <button
         type="button"
-        class="btn btn-outline-secondary btn-lg px-4"
-        (click)="checkState()"
+        class="btn btn-primary btn-lg px-4 gap-3"
+        (click)="bet()"
       >
-        Clear
+        Sell Tokens
       </button>
+      <p>Amount to sell</p>
+      <input #valueInput class="inputBuy" type="number" min="0" max="10" />
     </div>
+
+    <div>
+      <button
+        type="button"
+        class="btn btn-primary btn-lg px-4 gap-3"
+        (click)="bet()"
+      >
+        Bet
+      </button>
+      <p>no. of bets to place</p>
+      <input #valueInput class="inputBuy" type="number" min="0" max="10" />
+    </div>
+
+    <button
+      type="button"
+      class="btn btn-primary btn-lg px-4 gap-3"
+      (click)="closeLottery()"
+    >
+      Close Lottery
+    </button>
+  </div>
+
+  <div
+    class="d-grid gap-4 mat-card-content d-sm-flex justify-content-sm-center py-5"
+  ></div>
+  <h4>Owner Operations</h4>
+  <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+    <button
+      type="button"
+      class="btn btn-secondary btn-lg px-4 gap-3"
+      (click)="openBets()"
+    >
+      Open Bets
+    </button>
+
+    <button
+      type="button"
+      class="btn btn-secondary btn-lg px-4 gap-3"
+      (click)="withdrawOwnerPool()"
+    >
+      Withdraw Fees
+    </button>
   </div>
 </div>

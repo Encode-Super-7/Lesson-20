@@ -3,8 +3,8 @@ import { BigNumber, Contract, Wallet, ethers, utils } from 'ethers';
 import Lottery from '../assets/Lottery.json';
 import LotteryToken from '../assets/LotteryToken.json';
 
-const LOTTERY_ADDRESS = "0xb2b04ede3054c424C546A6698908F22cE752D87a"
-const TOKEN_ADDRESS = "0x6bb12A0d9b67ecA47d5ed9f71622b33F71746274"
+const LOTTERY_ADDRESS = '0xb2b04ede3054c424C546A6698908F22cE752D87a';
+const TOKEN_ADDRESS = '0x6bb12A0d9b67ecA47d5ed9f71622b33F71746274';
 
 @Component({
   selector: 'app-root',
@@ -33,29 +33,28 @@ export class AppComponent {
       LOTTERY_ADDRESS,
       Lottery.abi,
       this.provider
-    )
-  };
+    );
+  }
 
-  async checkState(){
-   
+  async checkState() {
     const state = await this.lotteryContract?.['betsOpen']();
-    console.log(`The lottery is ${state ? "open" : "closed"}\n`);
+    console.log(`The lottery is ${state ? 'open' : 'closed'}\n`);
     if (!state) return;
-    const currentBlock = await this.provider.getBlock("latest");
+    const currentBlock = await this.provider.getBlock('latest');
     const currentBlockDate = new Date(currentBlock.timestamp * 1000);
     const closingTime = await this.lotteryContract?.['betsClosingTime']();
     const closingTimeDate = new Date(closingTime.toNumber() * 1000);
     console.log(
-    `The last block was mined at ${currentBlockDate.toLocaleDateString()} : ${currentBlockDate.toLocaleTimeString()}\n`
-  );
+      `The last block was mined at ${currentBlockDate.toLocaleDateString()} : ${currentBlockDate.toLocaleTimeString()}\n`
+    );
     console.log(
       `lottery should close at ${closingTimeDate.toLocaleDateString()} : ${closingTimeDate.toLocaleTimeString()}\n`
     );
-  };
+  }
 
-  consoleLog(){
+  consoleLog() {
     console.log(this.lotteryContractAddress);
-    console.log("clicked button");
+    console.log('clicked button');
   }
 
   // syncBlock() {
@@ -87,7 +86,7 @@ export class AppComponent {
   // }
 
   createWallet() {
-    this.userWallet = Wallet.createRandom().connect(this.provider);
+    this.userWallet = Wallet.connect(this.provider);
     this.userWallet.getBalance().then((balanceBN) => {
       const balanceStr = utils.formatEther(balanceBN);
       this.userBalance = parseFloat(balanceStr);
@@ -109,30 +108,29 @@ export class AppComponent {
   //     });
   // }
 
-  
+  openBets() {}
 
-  openBets(){};
+  displayBalance() {}
 
-  displayBalance(){};
+  buyTokens() {}
 
-  buyTokens(){};
+  displayTokenBalance() {}
 
-  displayTokenBalance(){};
+  bet() {}
 
-  bet(){};
+  closeLottery() {}
 
-  closeLottery(){};
+  displayPrize() {}
 
-  displayPrize(){};
+  claimPrize() {}
 
-  claimPrize(){};
+  displayPrizeBalance() {}
 
-  displayPrizeBalance(){};
+  displayOwnerPool() {}
 
-  displayOwnerPool(){};
+  withdrawOwnerPool() {}
 
-  withdrawTokens(){};
+  withdrawTokens() {}
 
-  burnTokens(){};
-
-  }
+  burnTokens() {}
+}
