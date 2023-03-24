@@ -6,6 +6,12 @@ import LotteryToken from '../assets/LotteryToken.json';
 const LOTTERY_ADDRESS = '0xb2b04ede3054c424C546A6698908F22cE752D87a';
 const TOKEN_ADDRESS = '0x6bb12A0d9b67ecA47d5ed9f71622b33F71746274';
 
+declare global {
+  interface Window { ethereum: ethers.providers.ExternalProvider}
+
+}
+
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -14,7 +20,8 @@ const TOKEN_ADDRESS = '0x6bb12A0d9b67ecA47d5ed9f71622b33F71746274';
 export class AppComponent {
   blockNumber: number | string | undefined;
   provider: ethers.providers.BaseProvider;
-  userWallet: Wallet | undefined;
+  userWallet: Wallet | ethers.providers.JsonRpcSigner | undefined;
+  userWalletAddress: string | undefined;
   userBalance: number | undefined;
   userTokenBalance: number | undefined;
   // tokenContractAddress: string | undefined;
@@ -26,6 +33,7 @@ export class AppComponent {
   lotteryContract: Contract | undefined;
   tokenContractAddress: string | undefined;
   tokenContract: Contract | undefined;
+
 
   constructor() {
     this.provider = ethers.providers.getDefaultProvider('goerli');
@@ -90,13 +98,24 @@ export class AppComponent {
     this.userWallet.getBalance().then((balanceBN) => {
       const balanceStr = utils.formatEther(balanceBN);
       this.userBalance = parseFloat(balanceStr);
-      this.tokenContract?.['balanceOf'](this.userWallet?.address).then(
+      this.userWalletAddress = this.userWallet.address;
+      this.tokenContract?.['balanceOf'](this.userWallet?.getAddress).then(
         (tokenBalanceBN: BigNumber) => {
           const tokenBalanceStr = utils.formatEther(tokenBalanceBN);
           this.userTokenBalance = parseFloat(tokenBalanceStr);
         }
       );
     });
+  }
+
+  async connectWallet() {
+    const MetamaskProvider = new ethers.providers.Web3Provider(window.ethereum);
+    await MetamaskProvider.send("eth_requestAccounts",[]);
+    this.userWallet = MetamaskProvider.getSigner();
+    await this.userWallet.getAddress().then((address) => {
+      this.userWalletAddress = address;
+    })
+
   }
 
   // requestTokens(value: string) {

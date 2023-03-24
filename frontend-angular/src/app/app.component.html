@@ -3,21 +3,31 @@
   <div class="col-lg-6 mx-auto">
     <div class="my-4">
       <p class="lead mb-4">Connect your wallet to get bettin'</p>
+      <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+      
       <button
         type="button"
-        class="btn btn-success btn-lg px-4 gap-3"
+        class="btn btn-primary btn-lg px-4 gap-3"
+        (click)="connectWallet()"
+      >
+       Connect Wallet
+      </button>
+      <button
+        type="button"
+        class="btn btn-secondary btn-lg px-4 gap-3"
         (click)="createWallet()"
       >
-        {{ userWallet ? "Refresh" : "Show Lottery State" }}
+        Create Wallet
       </button>
-      <div *ngIf="userWallet" class="card my-4">
+    </div>
+      <div *ngIf="userWallet || userWalletAddress" class="card my-4">
         <div class="card-body">
           <h5 class="card-title">User Wallet</h5>
           <h6 class="card-subtitle mb-2 text-muted">
-            {{ userWallet.address }}
+            {{ userWallet?.address }}
           </h6>
           <h6 class="card-subtitle mb-2 text-muted">
-            {{ userWallet.privateKey }}
+            <!-- {{ userWallet.privateKey }} -->
           </h6>
           <p class="card-text">Current Prize Pool: {{ displayPrize() }} ETH</p>
           <p class="card-text">Current Fee Pool: ETH</p>
