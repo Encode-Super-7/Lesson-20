@@ -1,9 +1,12 @@
-import styled from 'styled-components'
+import styled from "styled-components";
 
+export const Nav = styled.nav`
+  padding: 20px 12px;
 
-export const nav = styled.div`
-padding: 20px 12px;
-width: 100%;
-height: 20px;
-z-index: 2;
-`
+  width: 100%;
+  height: 72;
+  z-index: 2;
+  position: fixed;
+  top: 0;
+  background-color: #555555;
+`;
