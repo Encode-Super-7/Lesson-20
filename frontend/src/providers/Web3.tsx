@@ -4,10 +4,10 @@ import { ConnectKitProvider, getDefaultClient } from 'connectkit'
 //import { ETH_CHAINS, SITE_NAME } from 'utils/config'
 import { useColorMode } from '@chakra-ui/react'
 import { ReactNode } from 'react'
-import { mainnet, sepolia, polygon, optimism, arbitrum } from '@wagmi/chains'
+import { mainnet, goerli } from '@wagmi/chains'
 
 
-const ETH_CHAINS = [mainnet, sepolia, polygon, optimism, arbitrum]
+const ETH_CHAINS = [mainnet, goerli]
 
 interface Props {
   children: ReactNode

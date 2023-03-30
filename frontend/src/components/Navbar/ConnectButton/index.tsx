@@ -1,6 +1,7 @@
 import { ConnectKitButton } from "connectkit";
 
 import styled from "styled-components";
+
 const StyledButton = styled.button`
   cursor: pointer;
   position: relative;
@@ -13,11 +14,11 @@ const StyledButton = styled.button`
   border-radius: 10rem;
   transition: 200ms ease;
   &:hover {
-    background: #FE9599;
+    background: #FE9999;
     border: 1px solid #FE9599;
   }
   &:active {
-    box-shadow: 0 6px 32px -6px #f87171;
+    box-shadow: 0 6px 16px -6px #f87171;
   }
 `;
 

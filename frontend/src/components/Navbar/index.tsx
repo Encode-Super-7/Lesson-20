@@ -1,24 +1,21 @@
-import { ConnectButton } from '../ConnectButton';
-import styled from "styled-components";
+import React from "react";
+import { Box } from "rebass/styled-components";
+import { Nav, LeftSideContainer, RightSideContainer } from "./style.css";
+import { ConnectButton } from "./ConnectButton";
 
-import { Nav } from "./style.css";
-
-
-
-interface Props {
-  className?: string;
-}
-
-export function Navbar(props: Props) {
-  const className = props.className ?? "";
-
+export const Navbar: React.FC = () => {
   return (
     <>
-    <Nav>
-        Lottery 
-        <ConnectButton />
-      
-    </Nav>
+      <Nav>
+        <Box>
+          <LeftSideContainer>Lottery Game</LeftSideContainer>
+        </Box>
+        <Box>
+          <RightSideContainer>
+            <ConnectButton />
+          </RightSideContainer>
+        </Box>
+      </Nav>
     </>
   );
-}
+};
